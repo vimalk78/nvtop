@@ -97,7 +97,7 @@ static const char *setup_proc_list_option_description[setup_proc_list_options_co
 
 static const char *setup_proc_list_value_descriptions[process_field_count] = {
     "Process Id",    "User name",        "Device Id", "Workload type",    "GPU usage", "Encoder usage",
-    "Decoder usage", "GPU memory usage", "CPU usage", "CPU memory usage", "Command"};
+    "Decoder usage", "GPU memory usage", "Power usage", "CPU usage", "CPU memory usage", "Command"};
 
 static unsigned int sizeof_setup_windows[setup_window_type_count] = {[setup_window_type_setup] = 11,
                                                                      [setup_window_type_single] = 0,

@@ -220,6 +220,14 @@ static void gpuinfo_populate_process_info(struct gpu_info *device) {
           100.);
       SET_GPUINFO_PROCESS(&device->processes[j], gpu_memory_percentage, (unsigned)percentage);
     }
+
+    // Estimate per-process power usage from GPU utilization
+    if (GPUINFO_DYNAMIC_FIELD_VALID(&device->dynamic_info, power_draw) &&
+        GPUINFO_PROCESS_FIELD_VALID(&device->processes[j], gpu_usage)) {
+      unsigned estimated_power = (unsigned)round(
+          ((double)device->processes[j].gpu_usage / 100.0) * (double)device->dynamic_info.power_draw);
+      SET_GPUINFO_PROCESS(&device->processes[j], power_usage, estimated_power);
+    }
   }
 }
 

@@ -181,7 +181,7 @@ static const char process_hide_nvtop_process[] = "HideNvtopProcess";
 static const char process_value_sortby[] = "SortBy";
 static const char process_value_display_field[] = "DisplayField";
 static const char *process_sortby_vals[process_field_count + 1] = {
-    "pId", "user", "gpuId", "type", "gpuRate", "encRate", "decRate", "memory", "cpuUsage", "cpuMem", "cmdline", "none"};
+    "pId", "user", "gpuId", "type", "gpuRate", "encRate", "decRate", "memory", "power", "cpuUsage", "cpuMem", "cmdline", "none"};
 static const char process_value_sort_order[] = "SortOrder";
 static const char process_sort_descending[] = "descending";
 static const char process_sort_ascending[] = "ascending";

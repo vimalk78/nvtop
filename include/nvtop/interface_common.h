@@ -46,6 +46,7 @@ enum process_field {
   process_enc_rate,
   process_dec_rate,
   process_memory,
+  process_power,
   process_cpu_usage,
   process_cpu_mem_usage,
   process_command,

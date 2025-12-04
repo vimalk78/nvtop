@@ -162,6 +162,7 @@ enum gpuinfo_process_info_valid {
   gpuinfo_process_cpu_memory_res_valid,
   gpuinfo_process_gpu_cycles_valid,
   gpuinfo_process_sample_delta_valid,
+  gpuinfo_process_power_usage_valid,
   gpuinfo_process_info_count
 };
 
@@ -185,6 +186,7 @@ struct gpu_process {
   unsigned cpu_usage;
   unsigned long cpu_memory_virt;
   unsigned long cpu_memory_res;
+  unsigned power_usage;                // Estimated power usage in milliwatts
   unsigned char valid[(gpuinfo_process_info_count + CHAR_BIT - 1) / CHAR_BIT];
 };
 

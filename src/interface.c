@@ -52,6 +52,7 @@ static unsigned int sizeof_process_field[process_field_count] = {
     [process_pid] = 7,       [process_user] = 4,          [process_gpu_id] = 3,   [process_type] = 8,
     [process_gpu_rate] = 4,  [process_enc_rate] = 4,      [process_dec_rate] = 4,
     [process_memory] = 14, // 9 for mem 5 for %
+    [process_power] = 7,   // "123.4W " format
     [process_cpu_usage] = 6, [process_cpu_mem_usage] = 9, [process_command] = 0,
 };
 
@@ -1139,7 +1140,7 @@ static void filter_out_nvtop_pid(all_processes *all_procs, struct nvtop_interfac
 }
 
 static const char *columnName[process_field_count] = {
-    "PID", "USER", "DEV", "TYPE", "GPU", "ENC", "DEC", "GPU MEM", "CPU", "HOST MEM", "Command",
+    "PID", "USER", "DEV", "TYPE", "GPU", "ENC", "DEC", "GPU MEM", "POWER", "CPU", "HOST MEM", "Command",
 };
 
 static void update_selected_offset_with_window_size(unsigned int *selected_row, unsigned int *offset,
@@ -1309,6 +1310,15 @@ static void print_processes_on_screen(all_processes all_procs, struct process_wi
       }
       printed += snprintf(&process_print_buffer[printed], process_buffer_line_size - printed, "%*s ",
                           sizeof_process_field[process_memory], memory);
+    }
+
+    if (process_is_field_displayed(process_power, fields_to_display)) {
+      if (GPUINFO_PROCESS_FIELD_VALID(processes[i].process, power_usage)) {
+        double watts = processes[i].process->power_usage / 1000.0;
+        printed += snprintf(&process_print_buffer[printed], process_buffer_line_size - printed, "%5.1fW ", watts);
+      } else {
+        printed += snprintf(&process_print_buffer[printed], process_buffer_line_size - printed, "  N/A  ");
+      }
     }
 
     if (process_is_field_displayed(process_cpu_usage, fields_to_display)) {
