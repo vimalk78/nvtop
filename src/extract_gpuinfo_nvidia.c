@@ -624,10 +624,8 @@ static void gpuinfo_nvidia_refresh_dynamic_info(struct gpu_info *_gpu_info) {
         SET_GPUINFO_DYNAMIC(dynamic_info, free_memory, memory_info.free);
         SET_GPUINFO_DYNAMIC(dynamic_info, mem_util_rate, memory_info.used * 100 / memory_info.total);
       }
-    } else {
-      // Memory query failed - likely unified memory GPU (error code 13 = NOT_SUPPORTED)
-      has_unified_memory = true;
     }
+    // If v2 failed, try v1 fallback below instead of assuming unified memory
   }
   if (!got_meminfo && !has_unified_memory && nvmlDeviceGetMemoryInfo) {
     nvmlMemory_v1_t memory_info;
