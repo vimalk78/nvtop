@@ -221,12 +221,23 @@ static void gpuinfo_populate_process_info(struct gpu_info *device) {
       SET_GPUINFO_PROCESS(&device->processes[j], gpu_memory_percentage, (unsigned)percentage);
     }
 
-    // Estimate per-process power usage from GPU utilization
-    if (GPUINFO_DYNAMIC_FIELD_VALID(&device->dynamic_info, power_draw) &&
-        GPUINFO_PROCESS_FIELD_VALID(&device->processes[j], gpu_usage)) {
-      unsigned estimated_power = (unsigned)round(
-          ((double)device->processes[j].gpu_usage / 100.0) * (double)device->dynamic_info.power_draw);
-      SET_GPUINFO_PROCESS(&device->processes[j], power_usage, estimated_power);
+    // Estimate per-process power usage from GPU utilization and memory usage
+    // Weighted: 70% GPU usage + 30% memory usage
+    if (GPUINFO_DYNAMIC_FIELD_VALID(&device->dynamic_info, power_draw)) {
+      double gpu_weight = 0.0;
+      double mem_weight = 0.0;
+
+      if (GPUINFO_PROCESS_FIELD_VALID(&device->processes[j], gpu_usage))
+        gpu_weight = device->processes[j].gpu_usage * 0.7;
+
+      if (GPUINFO_PROCESS_FIELD_VALID(&device->processes[j], gpu_memory_percentage))
+        mem_weight = device->processes[j].gpu_memory_percentage * 0.3;
+
+      if (gpu_weight > 0.0 || mem_weight > 0.0) {
+        unsigned estimated_power = (unsigned)round(
+            ((gpu_weight + mem_weight) / 100.0) * (double)device->dynamic_info.power_draw);
+        SET_GPUINFO_PROCESS(&device->processes[j], power_usage, estimated_power);
+      }
     }
   }
 }
